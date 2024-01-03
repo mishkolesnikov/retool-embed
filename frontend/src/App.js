@@ -1,25 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { Navigate, Routes, Route, Outlet, useLocation } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
-import Sidebar from "./components/Sidebar";
-import Topbar from "./components/Topbar";
-import RetoolWrapper from "./components/RetoolWrapper";
+import React, { useEffect, useState } from 'react';
+import { Navigate, Routes, Route, Outlet, useLocation } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
+import Sidebar from './components/Sidebar';
+import Topbar from './components/Topbar';
+import RetoolWrapper from './components/RetoolWrapper';
 
-import CssBaseline from "@mui/material/CssBaseline";
-import { Box } from "@mui/material";
+import CssBaseline from '@mui/material/CssBaseline';
+import { Box } from '@mui/material';
 
-import SplashPage from "./pages/SplashPage";
-import { homepage, auth, formattingPreferences} from "../config";
-import QuickLogin from "./pages/QuickLogin";
-
+import SplashPage from './pages/SplashPage';
+import { homepage, auth, formattingPreferences } from '../config';
+import QuickLogin from './pages/QuickLogin';
 
 const App = () => {
-  const { 
-    isLoading, 
-    isAuthenticated, 
-    user, 
-    getAccessTokenSilently, 
-  } = useAuth0();
+  const { isLoading, isAuthenticated, user, getAccessTokenSilently } =
+    useAuth0();
 
   const [userProfile, setUserProfile] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
@@ -27,7 +22,7 @@ const App = () => {
   const [sidebarList, setSidebarList] = useState([]);
   const [showBorder, setShowBorder] = useState(false);
   const [seed, setSeed] = useState(1);
-  const [font, setFont] = useState('Retool Default')
+  const [font, setFont] = useState('Retool Default');
   const location = useLocation();
 
   useEffect(() => {
@@ -43,10 +38,10 @@ const App = () => {
   const updateUserMetadata = async (accessToken, update) => {
     const updateUserDetailsUrl = `https://${auth.REACT_APP_AUTH0_DOMAIN}/api/v2/users/${user.sub}`;
     await fetch(updateUserDetailsUrl, {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(update),
     });
@@ -70,7 +65,6 @@ const App = () => {
         },
       },
     });
-    
   };
 
   useEffect(() => {
@@ -97,7 +91,7 @@ const App = () => {
           },
         });
       } catch (e) {
-        console.warn("getUserMetadata failed:", e);
+        console.warn('getUserMetadata failed:', e);
       }
     };
     if (user?.sub) {
@@ -106,7 +100,7 @@ const App = () => {
   }, [user?.sub]);
 
   useEffect(() => {
-    let isAdmin = userProfile?.user?.group === "admin";
+    let isAdmin = userProfile?.user?.group === 'admin';
     if (isAdmin) {
       setSidebarList(homepage.sidebarList);
     } else {
@@ -119,8 +113,9 @@ const App = () => {
     }
   }, [userProfile]);
 
-  if (isLoading) return "";
+  if (isLoading) return '';
 
+  console.log(isAuthenticated);
   if (!isAuthenticated) {
     return (
       <Routes>
@@ -131,7 +126,15 @@ const App = () => {
   }
 
   return (
-    <Box sx={{ width: "100%", height: "100vh", display: "flex", flexGrow: 1, backgroundColor: formattingPreferences.backgroundColor }}>
+    <Box
+      sx={{
+        width: '100%',
+        height: '100vh',
+        display: 'flex',
+        flexGrow: 1,
+        backgroundColor: formattingPreferences.backgroundColor,
+      }}
+    >
       <Routes>
         <Route path="/login" element={<SplashPage />} />
         <Route

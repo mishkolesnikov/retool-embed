@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import { Box, CircularProgress, Paper } from "@mui/material";
+import React, { useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+import { Box, CircularProgress, Paper } from '@mui/material';
 
 const QuickLogin = () => {
   const { loginWithRedirect } = useAuth0();
@@ -10,6 +10,7 @@ const QuickLogin = () => {
   }, []);
   // returned loader just in case the above code hangs,
   // but in all likelyhood, the user will never see this return function
+  console.log('quicklogin');
   return (
     <Paper className="bg">
       <Box className="login-container">

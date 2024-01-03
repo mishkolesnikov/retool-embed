@@ -9,40 +9,47 @@ var express = require('express');
 var router = express.Router();
 
 // Import the Retool app map utility function.
-var retoolAppMap = require('../utils/retoolAppsToUuids')
+var retoolAppMap = require('../utils/retoolAppsToUuids');
 
 // Define a route for retrieving an embedded Retool URL.
 router.post('/embedUrl', (req, res) => {
   // Parse the JWT access token.
-  const parsedToken = JSON.parse(atob(req.body.accessToken.split('.')[1]))
+  const parsedToken = JSON.parse(atob(req.body.accessToken.split('.')[1]));
 
   // Get the user group from the request.
-  const group = req.body.userProfile.user.group
+  const group = req.body.userProfile.user.group;
 
   // Set the API request options for the Retool API.
   const options = {
-    method: "post",
+    method: 'post',
     headers: {
-      'Authorization': `Bearer ${process.env.RETOOL_API_KEY}`,
+      Authorization: `Bearer ${process.env.RETOOL_API_KEY}`,
       'content-type': 'application/json',
     },
     body: JSON.stringify({
-      "landingPageUuid": retoolAppMap[req.body.retoolAppName],
-      "externalIdentifier": parsedToken.azp,
-      "groupIds": [1],
-      "metadata": {
-        "group": group,
-        "mode" : 'dark'
-      }
-    })
-  }
+      landingPageUuid: retoolAppMap[req.body.retoolAppName],
+      externalIdentifier: parsedToken.azp,
+      groupIds: [59020],
+      metadata: {
+        group: group,
+        mode: 'dark',
+      },
+      userInfo: {
+        email: 'm.kolesnikov@akveo.com',
+      },
+    }),
+  };
 
+  console.log();
   // Send a request to the Retool API to retrieve the embedded URL.
-  fetch(`https://${process.env.RETOOL_URL}/api/embed-url/external-user`, options)
-  .then(data => data.json())
-  .then(json => res.send(json))
-  .catch(e => console.log(e.message))
-})
+  fetch(
+    `https://${process.env.RETOOL_URL}/api/embed-url/external-user`,
+    options
+  )
+    .then((data) => data.json())
+    .then((json) => res.send(json))
+    .catch((e) => console.log(e.message));
+});
 
 // Export the router for use in other modules.
 module.exports = router;

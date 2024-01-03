@@ -1,9 +1,11 @@
 const path = require('path');
+const fs = require('fs');
 
-const { deployOnLocalhost } = require('./config')
+const { deployOnLocalhost } = require('./config');
 
-const OUTPUT_LOCATION = deployOnLocalhost ? path.join(__dirname, '../backend/public/js') : path.join(__dirname, 'dist');
-
+const OUTPUT_LOCATION = deployOnLocalhost
+  ? path.join(__dirname, '../backend/public/js')
+  : path.join(__dirname, 'dist');
 
 module.exports = {
   mode: 'development',
@@ -17,7 +19,7 @@ module.exports = {
     port: 3001,
     proxy: {
       context: ['/api', '/auth'],
-      target: 'http://localhost:3000'
+      target: 'http://localhost:3000',
     },
     historyApiFallback: true,
   },
@@ -27,25 +29,17 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
           options: {
-            "presets": [
-              "@babel/preset-env", 
-              "@babel/preset-react"
-            ],
-            "plugins": [
-              ["@babel/plugin-transform-runtime"]
-            ],
-          }
-        }
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+            plugins: [['@babel/plugin-transform-runtime']],
+          },
+        },
       },
       {
         test: /\.css$/,
-        use: [
-            'style-loader',
-            'css-loader'
-        ]
-      }
-    ]
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
   },
 };
